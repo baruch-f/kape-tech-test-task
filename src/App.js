@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import {BrowserRouter as Router, Route, Link, Routes} from 'react-router-dom';
+import {HashRouter, Route, Link, Routes} from 'react-router-dom';
+import './styles/styles.css';
 import HomePage from './components/HomePage';
 import ResultsPage from './components/ResultsPage';
 
@@ -23,7 +24,7 @@ const App = () => {
   }, [taskHistory]);
 
   return (
-      <Router>
+      <HashRouter>
         <nav>
           <ul>
             <li>
@@ -34,24 +35,24 @@ const App = () => {
             </li>
           </ul>
         </nav>
-          <Routes>
-            <Route
-                path="/"
-                exact
-                element={
-                        <HomePage
-                              tasks={tasks}
-                              setTasks={setTasks}
-                              taskHistory={taskHistory}
-                              setHistory={setHistory}
-                        />}
-            />
-            <Route
-                path="/results"
-                element={<ResultsPage taskHistory={taskHistory} />}
-            />
-          </Routes>
-      </Router>
+        <Routes>
+          <Route
+              path="/"
+              exact
+              element={
+                <HomePage
+                    tasks={tasks}
+                    setTasks={setTasks}
+                    taskHistory={taskHistory}
+                    setHistory={setHistory}
+                />}
+          />
+          <Route
+              path="/results"
+              element={<ResultsPage taskHistory={taskHistory} />}
+          />
+        </Routes>
+      </HashRouter>
   );
 }
 

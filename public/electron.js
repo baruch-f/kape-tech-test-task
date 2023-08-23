@@ -1,19 +1,12 @@
- const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain } = require("electron");
 const isDev = require("electron-is-dev");
 const path = require("path");
- const { add } = require("../utils/mathModule");
+const { countLetters} = require("./utils/mathModule");
 
-// Conditionally include the dev tools installer to load React Dev Tools
-let installExtension, REACT_DEVELOPER_TOOLS;
-
-if (isDev) {
-  const devTools = require("electron-devtools-installer");
-  installExtension = devTools.default;
-  REACT_DEVELOPER_TOOLS = devTools.REACT_DEVELOPER_TOOLS;
-}
+let mainWindow;
 
 function createWindow() {
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
@@ -27,9 +20,9 @@ function createWindow() {
   // Load from localhost if in development
   // Otherwise load index.html file
   mainWindow.loadURL(
-    isDev
-      ? "http://localhost:3000"
-      : `file://${path.join(__dirname, "../build/index.html")}`
+      isDev
+          ? "http://localhost:3000"
+          : `file://${path.join(__dirname, "../build/index.html")}`
   );
 
   // Open DevTools if in dev mode
@@ -42,12 +35,6 @@ function createWindow() {
 // function once the Electron application is initialized.
 // Install REACT_DEVELOPER_TOOLS as well if isDev
 app.whenReady().then(() => {
-  if (isDev) {
-    installExtension(REACT_DEVELOPER_TOOLS)
-      .then((name) => console.log(`Added Extension:  ${name}`))
-      .catch((error) => console.log(`An error occurred: , ${error}`));
-  }
-
   createWindow();
 });
 
@@ -70,7 +57,12 @@ app.on("activate", () => {
   }
 });
 
-ipcMain.on('perform-addition', (event, operands) => {
-   const result = add(operands[0], operands[1]);
-   event.reply('addition-result', result);
- });
+// ipcMain.on('count-letters', (event, tasks) => {
+//   const letterCount = countLetters(tasks);
+//   event.reply('letter-count-result', letterCount);
+// });
+
+ipcMain.on("letterCount", (event, tasks) => {
+  const letterCount = countLetters(tasks);
+  mainWindow.webContents.send("letterCount", letterCount);
+});

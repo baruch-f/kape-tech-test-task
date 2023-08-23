@@ -52,6 +52,11 @@
   },
   "homepage": "./",
   "main": "./public/electron.js",
+  "browser": {
+    "fs": false,
+    "os": false,
+    "path": false
+  },
   "build": {
     "appId": "com.electron.my_app",
     "productName": "My App",
